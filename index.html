@@ -182,49 +182,41 @@
 </template>
 
 <script>
-  // размер fireBall в пикселях
+  var FIREBALL_FULL_SPEED = 5;
+  var FIREBALL_SPEED_AGAINST_WIND = 2;
+  var WIZARD_HEIGHT_COEFFICIENT = 1.337;
+
+  var wizardWidth = 70;
   var fireballSize = 22;
-
-  // скорость файрболла (в зависимости от направления ветра)
-  var getFireballSpeed = function(left) {
-    if (left === true) {
-      return 5
-    } else {
-      return 2
-    }
-  };
-
-  // скорость движения мага
   var wizardSpeed = 3;
 
-  // ширина мага
-  var wizardWidth = 70;
-
-  // пропроция высоты мага === коэф. * ширину
-  var getWizardHeight = function() {
-    return 1.337 * wizardWidth;
+  var getFireballSpeed = function(left) {
+    return left === true ? FIREBALL_FULL_SPEED : FIREBALL_SPEED_AGAINST_WIND
   }
 
-  /*
-  функция в аргумент получает общую ширину игровой области и возвращает
-  число === половине ширины (для положения мага по горизонтали по умолчанию)
+  var getWizardHeight = function() {
+    return WIZARD_HEIGHT_COEFFICIENT * wizardWidth
+  }
+
+  /**
+  * Функция возвращает координаты мага по оси X
+  *
+  * @param {number} width - ширина игровой области
+  * @returns {number} - возвращает начальное положение мага по оси X (с вычетом .5 ширины мага)
   */
   function getWizardX(width) {
-    console.log(width);
-    console.log(width / 2);
-    return width / 2
+    return width / 2 - wizardWidth / 2
   }
 
-  /*
-  функция в аргумент получает общую высоту игровой области и возвращает
-  число === 2/3 от общей высоты (для положения мага по вертикали по умолчанию)
+  /**
+  * Функция размещает мага по оси Y
+  *
+  * @param {number} height - высота игровой области
+  * @returns {number} - возвращает начальное положение мага по оси Y
   */
   function getWizardY(height) {
-    console.log(height);
-    console.log((height / 3) * 2);
-    return (height / 3) * 2
+    return height / 3 * 2
   }
-
 </script>
 <script src="js/game.js"></script>
 
