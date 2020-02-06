@@ -44,15 +44,15 @@ function getRandomColor() {
  *
  * @param timesArray {array} - массив передаваемый в функцию для вычисления максимального временного значения
  * @return {number} time - возвращаем максимальное значение времени найденное в передаваемом массиве
- */
 function getMaxTimeResult(timesArray) {
   var orderedArray = timesArray.sort().reverse();
   var maxTimeIndexContent = orderedArray[0];
   return maxTimeIndexContent;
 }
+ */
 
 window.renderStatistics = function (ctx, players, times) {
-  var maxTime = getMaxTimeResult(times);
+  // var maxTime = getMaxTimeResult(times);
   // вызываем функция для отрисовки тени (нижний слой)
   getRectBanner(ctx, 105, 5, 'rgba(0, 0, 0, 0.5)');
 
