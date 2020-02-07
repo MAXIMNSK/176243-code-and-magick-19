@@ -1,27 +1,62 @@
 'use strict';
-// номинальная ширина и высота окна статистики
-var TOTAL_WIDTH = 500;
-var TOTAL_HEIGHT = 250;
-// номинальная ширина и высота свечи
-var GISTAGRAMM_BAR_WIDTH = 60;
-var GISTAGRAMM_BAR_HEIGHT = -1;
-// начальное положение свечи в окне статистики по оси X и Y
-var GISTAGRAMM_BAR_POSITION_X = 140;
-var GISTAGRAMM_BAR_POSITION_Y = 239;
-// начальное положение имени участника в окне статистики по оси X и Y
-var START_TEXT_POSITION_X = 150;
-var START_TEXT_POSITION_Y = 50;
-// шаг между элементами (расстановка между именами по горизонтали и свечами по горизонтали)
-var STEP_BETWEEN_ELEMENTS = 120;
 
-/* eslint-disable valid-jsdoc */
 /**
- * Функция рендерит окно статистики и тень (опционально)
- *
- * @param ctx - API для отрисовки графических элементов и заливки цветом методами canvas
- * x {number} position x - позиционирование элемента по оси x
- * y {number} position y - позиционирование элемента по оси y
- * color {string} - указываем цвет заливки элемента
+ * @constant
+ * @type {number} задаёт номинальное значение для окна статистики
+ */
+var TOTAL_WIDTH = 420;
+/**
+ * @constant
+ * @type {number} задаёт номинальное значение для окна статистики
+ */
+var TOTAL_HEIGHT = 270;
+/**
+ * @constant
+ * @type {number} задаёт номинальное значение ширины свечи
+ */
+var GISTAGRAMM_BAR_WIDTH = 40;
+/**
+ * @constant
+ * @type {number} задаёт номинальное значение высоты свечи
+ */
+var GISTAGRAMM_BAR_HEIGHT = -1;
+/**
+ * @constant
+ * @type {number} задаёт начальное положение свечи по оси X
+ */
+var GISTAGRAMM_BAR_POSITION_X = 155;
+/**
+ * @constant
+ * @type {number} задаёт начальное положение свечи по оси Y
+ */
+var GISTAGRAMM_BAR_POSITION_Y = 230;
+/**
+ * @constant
+ * @type {number} задаёт начальное положение текста по оси X
+ */
+var START_TEXT_POSITION_X = 155;
+/**
+ * @constant
+ * @type {number} задаёт начальное положение текста по оси Y
+ */
+var START_TEXT_POSITION_Y = 250;
+/**
+ * @constant
+ * @type {number} задаёт отступы между текстом и свечами
+ */
+var STEP_BETWEEN_ELEMENTS = 50;
+/**
+ * @constant
+ * @type {number} разрыв для выравнивания элементов, а так же используется как коэффициент деления при рендере результатов и баров
+ */
+var GAP = 10;
+
+/**
+ * Функция рендерит окно статистики и/или тень
+ * @param {object} ctx - API для отрисовки графических элементов и заливки цветом методами canvas
+ * @param {number} x - позиционирование элемента по оси x
+ * @param {number} y - позиционирование элемента по оси y
+ * @param {string} color - указываем цвет заливки элемента
  */
 function getRectBanner(ctx, x, y, color) {
   ctx.fillStyle = color;
@@ -29,31 +64,54 @@ function getRectBanner(ctx, x, y, color) {
 }
 
 /**
- * Функция возвращает рандомный цвет для перекраски элемента
- *
- * @return {string} color - возвращает цвет выбранный из массива с помощью генератора случайных чисел
+ * Функция возвращает сообщение-поздравление для победителя в окне статистики. Сообщению задаётся цвет, размер и шрифт.
+ * @param {object} ctx - API для отрисовки графических элементов и заливки цветом методами canvas
+ * @param {number} x - позиционирование элемента по оси x
+ * @param {number} y - позиционирование элемента по оси y
  */
-function getRandomColor() {
-  var colorPlayers = ['red', 'darkorange', 'yellow', 'green', 'skyblue', 'blue', 'darkviolet'];
-  var random = Math.floor(Math.random() * colorPlayers.length);
-  return colorPlayers[random];
+function getMessageForWinnver(ctx, x, y) {
+  ctx.fillStyle = '#000000';
+  ctx.font = '16px PT Mono';
+  ctx.fillText('Ура вы победили!', x, y);
+  ctx.fillText('Список результатов:', x, y + (GAP * 2));
 }
 
-window.renderStatistics = function (ctx, players, times) {
-  // вызываем функция для отрисовки тени (нижний слой)
-  getRectBanner(ctx, 105, 5, 'rgba(0, 0, 0, 0.5)');
+/**
+ * Функция возвращает рандомный оттенок синего цвета
+ * @return {number} возвращаем рандомное число от 1 до 100 округлённое до "нижней границы"
+ */
+function getRandomSaturation() {
+  return Math.floor(Math.random() * 100 + 1);
+}
 
-  // вызываем функцию для отрисовки элемента (окна статистики)
-  getRectBanner(ctx, 100, 0, '#2a2a2e');
+/**
+ * Функция для отрисовки окна статистики
+ * @param {object} ctx - API для отрисовки графических элементов и заливки цветом методами canvas
+ * @param {number} names - функция получает массив с именами участников
+ * @param {number} times - функция получает массив со временем игры участников
+ */
+window.renderStatistics = function (ctx, names, times) {
+  getRectBanner(ctx, 110, 20, 'rgba(0, 0, 0, 0.7)');
+  getRectBanner(ctx, 100, 10, '#ffffff');
+  getMessageForWinnver(ctx, 120, 40);
 
-  // отрисовываем декоративную внутреннюю рамку (опционально)
-  ctx.strokeStyle = '#ffffff';
-  ctx.strokeRect(110, 10, 480, 230);
-
-  // цикл создаёт пару: имя + свечку, красит в рандомно прилетающий цвет по запросу к функции
-  for (var i = 0; i < players.length; i++) {
-    ctx.fillStyle = getRandomColor();
-    ctx.fillText(players[i], START_TEXT_POSITION_X + STEP_BETWEEN_ELEMENTS * i, START_TEXT_POSITION_Y);
-    ctx.fillRect(GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i, GISTAGRAMM_BAR_POSITION_Y, GISTAGRAMM_BAR_WIDTH, (GISTAGRAMM_BAR_HEIGHT * times[i]) / 17);
+  /*
+    цикл рендерит имя участника текстом, количество игрового времени участника текстом, бар/свечку
+    бар отвечающий за наше время в игре окрашивается в красный цвет, другие свечки в синий (и его оттенки)
+  */
+  for (var i = 0; i < names.length; i++) {
+    if (names[i] === 'Вы') {
+      ctx.fillStyle = '#000000';
+      ctx.fillText(names[i], (START_TEXT_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), START_TEXT_POSITION_Y);
+      ctx.fillText(Math.round(times[i]), (GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y + (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2) - GAP);
+      ctx.fillStyle = 'rgba(255, 0, 0, 1)';
+      ctx.fillRect((GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y, GISTAGRAMM_BAR_WIDTH, (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2));
+    } else {
+      ctx.fillStyle = '#000000';
+      ctx.fillText(names[i], (START_TEXT_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), START_TEXT_POSITION_Y);
+      ctx.fillText(Math.round(times[i]), (GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y + (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2) - GAP);
+      ctx.fillStyle = 'hsl(240, 100%, ' + getRandomSaturation() + '%)';
+      ctx.fillRect((GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y, GISTAGRAMM_BAR_WIDTH, (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2));
+    }
   }
 };
