@@ -1,55 +1,16 @@
 'use strict';
 
-/**
- * @constant
- * @type {number} задаёт номинальное значение для окна статистики
- */
 var TOTAL_WIDTH = 420;
-/**
- * @constant
- * @type {number} задаёт номинальное значение для окна статистики
- */
 var TOTAL_HEIGHT = 270;
-/**
- * @constant
- * @type {number} задаёт номинальное значение ширины свечи
- */
 var GISTAGRAMM_BAR_WIDTH = 40;
-/**
- * @constant
- * @type {number} задаёт номинальное значение высоты свечи
- */
 var GISTAGRAMM_BAR_HEIGHT = -1;
-/**
- * @constant
- * @type {number} задаёт начальное положение свечи по оси X
- */
 var GISTAGRAMM_BAR_POSITION_X = 155;
-/**
- * @constant
- * @type {number} задаёт начальное положение свечи по оси Y
- */
 var GISTAGRAMM_BAR_POSITION_Y = 230;
-/**
- * @constant
- * @type {number} задаёт начальное положение текста по оси X
- */
 var START_TEXT_POSITION_X = 155;
-/**
- * @constant
- * @type {number} задаёт начальное положение текста по оси Y
- */
 var START_TEXT_POSITION_Y = 250;
-/**
- * @constant
- * @type {number} задаёт отступы между текстом и свечами
- */
 var STEP_BETWEEN_ELEMENTS = 50;
-/**
- * @constant
- * @type {number} разрыв для выравнивания элементов, а так же используется как коэффициент деления при рендере результатов и баров
- */
 var GAP = 10;
+var COEFFICIENT_DIVIDE = 50;
 
 /**
  * Функция рендерит окно статистики и/или тень
@@ -95,23 +56,17 @@ window.renderStatistics = function (ctx, names, times) {
   getRectBanner(ctx, 100, 10, '#ffffff');
   getMessageForWinnver(ctx, 120, 40);
 
-  /*
-    цикл рендерит имя участника текстом, количество игрового времени участника текстом, бар/свечку
-    бар отвечающий за наше время в игре окрашивается в красный цвет, другие свечки в синий (и его оттенки)
-  */
   for (var i = 0; i < names.length; i++) {
+    ctx.fillStyle = '#000000';
+    ctx.fillText(names[i], (START_TEXT_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), START_TEXT_POSITION_Y);
+    ctx.fillText(Math.round(times[i]), (GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y + (GISTAGRAMM_BAR_HEIGHT * times[i]) / COEFFICIENT_DIVIDE - GAP);
+
     if (names[i] === 'Вы') {
-      ctx.fillStyle = '#000000';
-      ctx.fillText(names[i], (START_TEXT_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), START_TEXT_POSITION_Y);
-      ctx.fillText(Math.round(times[i]), (GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y + (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2) - GAP);
       ctx.fillStyle = 'rgba(255, 0, 0, 1)';
-      ctx.fillRect((GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y, GISTAGRAMM_BAR_WIDTH, (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2));
+      ctx.fillRect((GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y, GISTAGRAMM_BAR_WIDTH, (GISTAGRAMM_BAR_HEIGHT * times[i]) / COEFFICIENT_DIVIDE);
     } else {
-      ctx.fillStyle = '#000000';
-      ctx.fillText(names[i], (START_TEXT_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), START_TEXT_POSITION_Y);
-      ctx.fillText(Math.round(times[i]), (GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y + (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2) - GAP);
       ctx.fillStyle = 'hsl(240, 100%, ' + getRandomSaturation() + '%)';
-      ctx.fillRect((GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y, GISTAGRAMM_BAR_WIDTH, (GISTAGRAMM_BAR_HEIGHT * times[i]) / (GAP * 2));
+      ctx.fillRect((GISTAGRAMM_BAR_POSITION_X + STEP_BETWEEN_ELEMENTS * i) + (i * GISTAGRAMM_BAR_WIDTH), GISTAGRAMM_BAR_POSITION_Y, GISTAGRAMM_BAR_WIDTH, (GISTAGRAMM_BAR_HEIGHT * times[i]) / COEFFICIENT_DIVIDE);
     }
   }
 };
