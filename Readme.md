@@ -1,7 +1,7 @@
 # Учебный проект «Код и Магия» [![Build status][travis-image]][travis-url]
 
 * Студент: [Maxim Savickiy](https://htmlacademy.ru/profile/id176243).
-* Наставник: [`Артём Рудов`](https://htmlacademy.ru/profile/artrudov).
+* Наставник: [Артём Рудов](https://htmlacademy.ru/profile/artrudov).
 
 ---
 
