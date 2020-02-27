@@ -13,25 +13,25 @@ var wizardsListWrapper = document.querySelector('.setup-similar');
 var showWizardsList = document.querySelector('.setup-similar-list');
 var wizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
 var shadowFragment = document.createDocumentFragment();
-var openSettingWindow = document.querySelector('.setup-open');
-var openSettingWindowIcon = document.querySelector('.setup-open-icon');
-var closeSettingWindowBtn = document.querySelector('.setup-close');
-var pushFormToServerButton = document.querySelector('.setup-submit');
+var settingsCaller = document.querySelector('.setup-open');
+var avatar = document.querySelector('.setup-open-icon');
+var closerSettings = document.querySelector('.setup-close');
+var sendFormBtn = document.querySelector('.setup-submit');
 var formWizardSettings = document.querySelector('.setup-wizard-form');
 var formWizardNameArea = document.querySelector('.setup-user-name');
 var wizardRobe = document.querySelector('.setup-wizard').querySelector('.wizard-coat');
 var wizardEyes = document.querySelector('.setup-wizard').querySelector('.wizard-eyes');
 var fireball = document.querySelector('.setup-fireball-wrap');
 
-openSettingWindow.addEventListener('click', onBtnWizardSettingsOpen);
-openSettingWindowIcon.addEventListener('keydown', onIconWizardSettingsOpen);
-closeSettingWindowBtn.addEventListener('click', onBtnWizardSettingsClose);
-document.addEventListener('keydown', onPressBtnWizardSettingsClose);
-pushFormToServerButton.addEventListener('click', onBtnPushForm);
-pushFormToServerButton.addEventListener('keydown', onPressEnterPushForm);
-wizardRobe.addEventListener('click', onWizardRobeColorChange);
-wizardEyes.addEventListener('click', onWizardEyesColorChange);
-fireball.addEventListener('click', onFireballColorChange);
+settingsCaller.addEventListener('click', onBtnClick);
+avatar.addEventListener('keydown', onAvatarKeypress);
+closerSettings.addEventListener('click', onSettingsCloserClick);
+document.addEventListener('keydown', onDocumentKeypress);
+sendFormBtn.addEventListener('click', onSendFormClick);
+sendFormBtn.addEventListener('keydown', onSendFormKeypress);
+wizardRobe.addEventListener('click', onRobeClick);
+wizardEyes.addEventListener('click', onEyesClick);
+fireball.addEventListener('click', onFireballClick);
 
 for (var i = 0; i < countWizards; i++) {
   wizardsSettings.push(getNewWizard());
@@ -91,7 +91,7 @@ function showHiddenElements() {
 /**
  * Функция-обработчик показывает окно настроек персонажа
  */
-function onBtnWizardSettingsOpen() {
+function onBtnClick() {
   settingsWindow.classList.remove('hidden');
 }
 
@@ -99,7 +99,7 @@ function onBtnWizardSettingsOpen() {
  * Функция-обработчик показывает окно настроек персонажа при фокусе инициатора и нажатии enter
  * @param {*} evt событие передаваемое в функцию по умолчанию JSом
  */
-function onIconWizardSettingsOpen(evt) {
+function onAvatarKeypress(evt) {
   if (evt.keyCode === 13) {
     settingsWindow.classList.remove('hidden');
   }
@@ -108,7 +108,7 @@ function onIconWizardSettingsOpen(evt) {
 /**
  * Функция-обработчик скрывает окно настроек персонажа при клике на кнопку закрытия
  */
-function onBtnWizardSettingsClose() {
+function onSettingsCloserClick() {
   settingsWindow.classList.add('hidden');
 }
 
@@ -116,12 +116,12 @@ function onBtnWizardSettingsClose() {
  * Функция-обработчик скрывает окно настроек персонажа при условии: нажата кнопка esc когда на поле ввода имени персонажа не было фокуса. Или: при кнопке закрытия окна настроек находящейся в фокусе мы нажимаем enter
  * @param {*} evt событие передаваемое в функцию по умолчанию JSом
  */
-function onPressBtnWizardSettingsClose(evt) {
+function onDocumentKeypress(evt) {
   if (evt.keyCode === 27 && document.activeElement !== formWizardNameArea) {
     settingsWindow.classList.add('hidden');
   }
 
-  if (document.activeElement === closeSettingWindowBtn && evt.keyCode === 13) {
+  if (document.activeElement === closerSettings && evt.keyCode === 13) {
     settingsWindow.classList.add('hidden');
   }
 }
@@ -129,7 +129,7 @@ function onPressBtnWizardSettingsClose(evt) {
 /**
  * Функция-обработчик отправляет форму на сервер при клике на кнопку "сохранить" (отсутствует атрибут submit в разметке у кнопки)
  */
-function onBtnPushForm() {
+function onSendFormClick() {
   formWizardSettings.submit();
 }
 
@@ -137,8 +137,8 @@ function onBtnPushForm() {
  * Функция-обработчик отправляет форму на сервер если кнопка "сохранить" в фокусе и была нажата кнопка enter
  * @param {*} evt событие передаваемое в функцию по умолчанию JSом
  */
-function onPressEnterPushForm(evt) {
-  if (document.activeElement === pushFormToServerButton && evt.keyCode === 13) {
+function onSendFormKeypress(evt) {
+  if (document.activeElement === sendFormBtn && evt.keyCode === 13) {
     formWizardSettings.submit();
   }
 }
@@ -146,20 +146,20 @@ function onPressEnterPushForm(evt) {
 /**
  * Функция-обработчик изменяет цвет робы при клике на оную (свойство fill получает рандомный элемент из константы CLOAK_COLOR)
  */
-function onWizardRobeColorChange() {
+function onRobeClick() {
   wizardRobe.style.fill = CLOAK_COLOR[getRandomNumber(CLOAK_COLOR.length)];
 }
 
 /**
  * Функция-обработчик изменяет цвет глаз при клике на них (свойство fill получает рандомный элемент из константы WIZARD_EYES_COLOR)
  */
-function onWizardEyesColorChange() {
+function onEyesClick() {
   wizardEyes.style.fill = WIZARD_EYES_COLOR[getRandomNumber(WIZARD_EYES_COLOR.length)];
 }
 
 /**
  * Функция-обработчик изменяет цвет файрболла при клике на него (свойство backgroundColor получает рандомный цвет из константы FIREBALL_COLORS)
  */
-function onFireballColorChange() {
+function onFireballClick() {
   fireball.style.backgroundColor = FIREBALL_COLORS[getRandomNumber(FIREBALL_COLORS.length)];
 }
