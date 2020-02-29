@@ -5,6 +5,8 @@ var WIZARD_SURNAMES = ['да Марья', 'Верон', 'Мирабелла', '�
 var WIZARD_EYES_COLOR = ['black', 'red', 'blue', 'yellow', 'green'];
 var CLOAK_COLOR = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
+var BTN_ESC_CODE = 27;
+var BTN_ENTER_CODE = 13;
 
 var countWizards = 4;
 var wizardsSettings = [];
@@ -22,16 +24,6 @@ var formWizardNameArea = document.querySelector('.setup-user-name');
 var wizardRobe = document.querySelector('.setup-wizard').querySelector('.wizard-coat');
 var wizardEyes = document.querySelector('.setup-wizard').querySelector('.wizard-eyes');
 var fireball = document.querySelector('.setup-fireball-wrap');
-
-settingsCaller.addEventListener('click', onBtnClick);
-avatar.addEventListener('keydown', onAvatarKeypress);
-closerSettings.addEventListener('click', onSettingsCloserClick);
-document.addEventListener('keydown', onDocumentKeypress);
-sendFormBtn.addEventListener('click', onSendFormClick);
-sendFormBtn.addEventListener('keydown', onSendFormKeypress);
-wizardRobe.addEventListener('click', onRobeClick);
-wizardEyes.addEventListener('click', onEyesClick);
-fireball.addEventListener('click', onFireballClick);
 
 for (var i = 0; i < countWizards; i++) {
   wizardsSettings.push(getNewWizard());
@@ -100,7 +92,7 @@ function onBtnClick() {
  * @param {*} evt событие передаваемое в функцию по умолчанию JSом
  */
 function onAvatarKeypress(evt) {
-  if (evt.keyCode === 13) {
+  if (evt.keyCode === BTN_ENTER_CODE) {
     settingsWindow.classList.remove('hidden');
   }
 }
@@ -117,11 +109,11 @@ function onSettingsCloserClick() {
  * @param {*} evt событие передаваемое в функцию по умолчанию JSом
  */
 function onDocumentKeypress(evt) {
-  if (evt.keyCode === 27 && document.activeElement !== formWizardNameArea) {
+  if (evt.keyCode === BTN_ESC_CODE && document.activeElement !== formWizardNameArea) {
     settingsWindow.classList.add('hidden');
   }
 
-  if (document.activeElement === closerSettings && evt.keyCode === 13) {
+  if (document.activeElement === closerSettings && evt.keyCode === BTN_ENTER_CODE) {
     settingsWindow.classList.add('hidden');
   }
 }
@@ -138,7 +130,7 @@ function onSendFormClick() {
  * @param {*} evt событие передаваемое в функцию по умолчанию JSом
  */
 function onSendFormKeypress(evt) {
-  if (document.activeElement === sendFormBtn && evt.keyCode === 13) {
+  if (document.activeElement === sendFormBtn && evt.keyCode === BTN_ENTER_CODE) {
     formWizardSettings.submit();
   }
 }
@@ -163,3 +155,13 @@ function onEyesClick() {
 function onFireballClick() {
   fireball.style.backgroundColor = FIREBALL_COLORS[getRandomNumber(FIREBALL_COLORS.length)];
 }
+
+settingsCaller.addEventListener('click', onBtnClick);
+avatar.addEventListener('keydown', onAvatarKeypress);
+closerSettings.addEventListener('click', onSettingsCloserClick);
+document.addEventListener('keydown', onDocumentKeypress);
+sendFormBtn.addEventListener('click', onSendFormClick);
+sendFormBtn.addEventListener('keydown', onSendFormKeypress);
+wizardRobe.addEventListener('click', onRobeClick);
+wizardEyes.addEventListener('click', onEyesClick);
+fireball.addEventListener('click', onFireballClick);
