@@ -11,21 +11,18 @@
       startY: evt.clientY,
     };
 
-    // флаг отвечает за статус объекта - было перемещено окно или нет
-    var rePosition = false;
-
     /**
      * Функция отвечает за перемещение элемента-окна
      * @param {*} evtMove событие передаваемое в функцию
      */
     function onMouseMove(evtMove) {
-      // новые координаты перемещение на 1 пиксель
+      // новые координаты смещенные на 1 пиксель
       var relocate = {
         x: coordinatesStart.startX - evtMove.clientX,
         y: coordinatesStart.startY - evtMove.clientY,
       };
 
-      // перезаписываем прежние координаты
+      // перезаписываем прежние координаты при каждом изменении позиции окна, для дальнейшего перерасчёта
       coordinatesStart = {
         startX: evtMove.clientX,
         startY: evtMove.clientY,
@@ -34,8 +31,7 @@
       // меняем стили для целевого элемента который перемещаем
       settingsWindow.style.top = (settingsWindow.offsetTop - relocate.y) + 'px';
       settingsWindow.style.left = (settingsWindow.offsetLeft - relocate.x) + 'px';
-
-      rePosition = true;
+      window.utility.positionChange = true;
     }
 
     /**
@@ -46,7 +42,7 @@
       document.removeEventListener('mouseup', onMouseUp);
 
       /**
-       * Функция изменяет действие по умолчанию (по умолчанию открывается окно с загрузкой файла) и удаляет слушателя событий вызывающего данную функцию по клику на целевой элемент
+       * Функция изменяет действие по умолчанию (по умолчанию открывается окно с загрузкой файла) после изменения положения окна, и удаляет слушателя событий вызывающего данную функцию по клику на целевой элемент
        * @param {*} evtMouseUp событие передаваемое в функцию, для сброса действия по умолчанию
        */
       function cancelEventDefault(evtMouseUp) {
@@ -54,8 +50,8 @@
         initiatorForMove.removeEventListener('click', cancelEventDefault);
       }
 
-      // если было произведено перемещение окна, то вешаем обработчик событий на инициатор движения целевого окна
-      if (rePosition === true) {
+      // если было произведено перемещение окна, то вешаем обработчик событий на инициатор движения для целевого окна
+      if (window.utility.positionChange === true) {
         initiatorForMove.addEventListener('click', cancelEventDefault);
       }
     }

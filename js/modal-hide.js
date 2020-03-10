@@ -14,11 +14,11 @@
   }
 
   /**
-   * Функция-обработчик скрывает окно настроек персонажа при условии: нажата кнопка esc когда на поле ввода имени персонажа не было фокуса. Или: при кнопке закрытия окна настроек находящейся в фокусе мы нажимаем enter
+   * Функция-обработчик скрывает окно настроек персонажа при условии: нажата кнопка esc когда на поле ввода имени персонажа не было фокуса, окно настроек не скрыто. Или: при кнопке закрытия окна настроек находящейся в фокусе мы нажимаем enter
    * @param {*} evt событие передаваемое в функцию по умолчанию JSом
    */
   function onDocumentKeypress(evt) {
-    if (evt.keyCode === window.utility.pressEsc && document.activeElement !== formWizardNameArea) {
+    if (evt.keyCode === window.utility.pressEsc && document.activeElement !== formWizardNameArea && settingsWindow.classList.contains('hidden') !== true) {
       settingsWindow.classList.toggle('hidden');
     }
 
