@@ -2,13 +2,13 @@
 
 (function () {
   var sendFormBtn = document.querySelector('.setup-submit');
-  var formWizardSettings = document.querySelector('.setup-wizard-form');
+  // var formWizardSettings = document.querySelector('.setup-wizard-form');
 
   /**
    * Функция-обработчик отправляет форму на сервер при клике на кнопку "сохранить" (отсутствует атрибут submit в разметке у кнопки)
    */
   function onSendFormClick() {
-    formWizardSettings.submit();
+    // formWizardSettings.submit();
   }
 
   /**
@@ -17,7 +17,7 @@
    */
   function onSendFormKeypress(evt) {
     if (document.activeElement === sendFormBtn && evt.keyCode === window.utility.pressEnter) {
-      formWizardSettings.submit();
+      // formWizardSettings.submit();
     }
   }
 

@@ -8,6 +8,14 @@
   var CLOAK_COLOR = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
   var FIREBALL_COLORS = ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848'];
   var positionChange = false;
+  var similarWizards = document.querySelector('.setup-similar');
+  var defaultCoordinates = {
+    x: null,
+    y: null,
+  };
+
+  // по умолчанию показываем список похожих магов
+  similarWizards.classList.remove('hidden');
 
   /**
    * Функция возвращает рандомное число в зависимости от длины передаваемого в неё массива
@@ -27,5 +35,6 @@
     colorCloak: CLOAK_COLOR,
     colorFireball: FIREBALL_COLORS,
     positionChange: positionChange,
+    coordinates: defaultCoordinates,
   };
 })();
